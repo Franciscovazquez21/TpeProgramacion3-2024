@@ -142,7 +142,7 @@ public class Servicios {
 	 */
 	public Solucion backtraking (int limiteTprocNoRefrig){//limiteTprocNoRefrig:valor que se establece para limite procesadores no refrigerados
 		Solucion solucionActual = new Solucion(procesadores,0);
-		Solucion solucion = new Solucion(5000);
+		Solucion solucion = new Solucion(-1);
 		List<Tarea>tareasXasignar=new ArrayList<>(listaTareasOrdenada);
 		backtraking(limiteTprocNoRefrig,0,solucionActual,solucion,tareasXasignar);
 		return solucion;	
@@ -150,7 +150,7 @@ public class Servicios {
 
 
 	private void backtraking(int limiteTprocNoRefrig, int index, Solucion estadoActual, Solucion solucion, List<Tarea>tareasXasignar){
-		
+		estadoActual.addEstado();
 		if(index==tareasXasignar.size()){//no hay mas tareas por asignar
 			if(estadoActual.esSolucion(solucion)){
 			operarSolucion(estadoActual,solucion);
@@ -161,39 +161,43 @@ public class Servicios {
 			
 			while (procesadores.hasNext()) {
 				Procesador p = procesadores.next();
-				if(cumpleRestriccion(p, limiteTprocNoRefrig, siguiente)&&!poda(p, siguiente, solucion)){
+				if(cumpleRestriccion(p, limiteTprocNoRefrig, siguiente)){
 					asignarTarea(p,siguiente,estadoActual);
-					backtraking(limiteTprocNoRefrig, index+1, estadoActual, solucion, tareasXasignar);
-					desasignarTarea(p,siguiente);	
+					if(!poda(p, siguiente, solucion)){
+						backtraking(limiteTprocNoRefrig, index+1, estadoActual, solucion, tareasXasignar);
+					}
+					desasignarTarea(p,siguiente,estadoActual);
 				}
 			}
 		}
-		//estadoActual.setTiempo(0);
 	}
 
-	private void operarSolucion(Solucion nuevaSolucion, Solucion anteriorSolucion){
-		anteriorSolucion.removeAll();
-		anteriorSolucion.addAll(nuevaSolucion.getListProcesadores());
-		anteriorSolucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
-		anteriorSolucion.setCantEstados(nuevaSolucion.cantEstados());
-		nuevaSolucion.setTiempo(0);
+	private void operarSolucion(Solucion nuevaSolucion, Solucion solucion){
+		solucion.removeAll();
+		solucion.addAll(nuevaSolucion.getCopiaProcesadores());
+		solucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
+		solucion.setCantEstados(nuevaSolucion.cantEstados());
+		solucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
 	}
 
 	private boolean cumpleRestriccion(Procesador p, int limiteTprocNoRefrig, Tarea t){
-		return !p.exedeTiempoEjec(limiteTprocNoRefrig, t);
+		return (!p.exedeTiempoEjec(limiteTprocNoRefrig, t)&&p.getTareasCriticas()<2);
 	}
 
 	private boolean poda(Procesador p, Tarea t, Solucion s){
+		if(s.getTiempo()==-1){
+			return false;
+		}
 		return (p.getTiempoTotal()+t.getTiempo())>s.getTiempo();
 	}
 
 	private void asignarTarea(Procesador p, Tarea t,Solucion s){
 		p.asignarTarea(t);
-		s.addEstado();
 	}
 
-	private void desasignarTarea(Procesador p, Tarea t){
+	private void desasignarTarea(Procesador p, Tarea t, Solucion s){
 		p.removerTarea(t);
+		s.removeEstado();
 	}
 
 

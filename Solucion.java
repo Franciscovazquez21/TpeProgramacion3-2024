@@ -23,78 +23,78 @@ public class Solucion {
         this.procesadores=new ArrayList<>();
     }
 
-    //compara solucion actual y externa
+    //compara tiempos maximos de soluciones
     public boolean esSolucion(Solucion s){
-        return this.getTiempoMaxEjec()<s.getTiempo();
+        if(s.getTiempo()==-1){
+            return true;
+        }else{
+            return this.getTiempoMaxEjec()<s.getTiempo();
+        }     
     }
+
     //vacia lista de procesadores
     public void removeAll(){
         procesadores.clear();
     }
+
     //agrega la nueva lista de procesadores
     public void addAll(List<Procesador>nuevaListaProc){
         procesadores.addAll(nuevaListaProc);
     }
-    //retorna el valor del procesador que mas tiempo marco de procesamiento(mejorar)
+
+    //procesador con mayor tiempo de ejecucion
     public int getTiempoMaxEjec(){
+        int tiempo=0;
         for (Procesador procesador : procesadores) {
-            if(procesador.getTiempoTotal()>tiempoMaxEjec){
-                tiempoMaxEjec=procesador.getTiempoTotal();
-            
+            if(procesador.getTiempoTotal()>tiempo){
+                tiempo=procesador.getTiempoTotal();
+            }
         }
+        return tiempo;
     }
-        return tiempoMaxEjec;
-    }
-    //devuelve mayor tiempo de ejecucion
+
+    //mayor tiempo ejecucion
     public int getTiempo(){
         return tiempoMaxEjec;
     }
+
+    public void setTiempo(int tiempo){
+        this.tiempoMaxEjec=tiempo;
+    }
     
-    //cantidad de estados generados
+    //estados generados
     public int cantEstados(){
         return cantEstados;
     }
 
-    //actualizacion de estados
+    //actualizar estado
     public void setCantEstados(int estado){
         this.cantEstados=estado;
     }
-    //actualizar estado
+
+    //incrementar estado
     public void addEstado(){
         cantEstados++;
     }
-    //actualizar estado
+
+    //decrementar estado
     public void removeEstado(){
         cantEstados--;
     }
-    //devuelve objeto iterador de procesadores
+
+    //procesadores para iterar
     public Iterator<Procesador> getProcesadores(){
         return this.procesadores.iterator();
     }
-    //genera copia de procesadores
-    public List<Procesador>getListProcesadores(){
+
+    //copia de procesadores
+    public List<Procesador>getCopiaProcesadores(){
         List<Procesador>aux=new ArrayList<>();
             for (Procesador procesador : procesadores) {
                 Procesador p= procesador.getCopia();
                 aux.add(p);
             }
             return aux;
-    }
-
-    public Solucion getCopia(){
-        List<Procesador>aux=new ArrayList<>();
-            for (Procesador procesador : procesadores) {
-                Procesador p= procesador.getCopia();
-                aux.add(p);
-            }
-        Solucion copia = new Solucion(aux, this.getTiempoMaxEjec());
-        copia.cantEstados=this.cantEstados;
-        
-        return copia;
-    }
-    
-    public void setTiempo(int tiempo){
-        this.tiempoMaxEjec=tiempo;
     }
 
     public String toString(){
@@ -104,5 +104,17 @@ public class Solucion {
             }
             return result;
     }
+
+    /*public Solucion getCopia(){
+        List<Procesador>aux=new ArrayList<>();
+            for (Procesador procesador : procesadores) {
+                Procesador p= procesador.getCopia();
+                aux.add(p);
+            }
+        Solucion copia = new Solucion(aux, this.getTiempoMaxEjec());
+        copia.cantEstados=this.cantEstados;
+        
+        return copia;
+    }*/
 
 }
