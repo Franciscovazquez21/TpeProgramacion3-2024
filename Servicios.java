@@ -54,7 +54,7 @@ public class Servicios {
 		
     /*
      * Expresar la complejidad temporal del servicio 2.
-	 * O(1)
+	 * O(1)-->>preguntar si se toma correcto enviar sin copia a fines del enunciado
      */
 	public List<Tarea> servicio2(boolean esCritica) {
 		if(esCritica){
@@ -65,7 +65,7 @@ public class Servicios {
 	}
 		
     /*
-     * Expresar la complejidad temporal del servicio 3.
+     * La complejidad tenporal de servicio3 es O(log n) ya que se realiza una busqueda binaria
      */
 	public List<Tarea> servicio3(int prioridadInferior, int prioridadSuperior) {
 		//control parametros incorrectos
@@ -82,21 +82,24 @@ public class Servicios {
 		return listaTareasOrdenada.subList(indiceMenor, indiceMayor+1);
 	}
 
+
+	/*
+     * La complejidad temporal de buscarIndice es O(log n)es una busqueda binaria
+	 * como en el ejercicio se pueden encontrar prioridades repetidas, se implemento una variable 
+	 * booleana "menor", que evalua si el indice es el minimo o el maximo.
+     */
 	private int buscarIndice(int valor, int inicio , int fin,boolean menor){
-		
 		if(inicio>fin){
 			return -1;
 		}
-
 		int medio = (inicio+fin)/2;
-
 		//control de Tareas con igual prioridad, se busca hasta la frontera.
 		if(listaTareasOrdenada.get(medio).getPrioridad()==valor){
-			if(menor){
+			if(menor){//busqueda prioridad indiceMayor
 				while(medio>0&&listaTareasOrdenada.get(medio-1).getPrioridad()==valor){
 					medio--;
 				}		
-			}else{
+			}else{//busqueda prioridad indiceMenor
 				while(medio<listaTareasOrdenada.size()-1&&listaTareasOrdenada.get(medio+1).getPrioridad()==valor){
 					medio++;
 				}
@@ -113,11 +116,11 @@ public class Servicios {
 
 
 	/*
-	 * Metodo servicio 1: agrega todas las tareas a la estructura Hash por Id. O(n)
+	 * Metodo complementario servicio 1: agrega todas las tareas a la estructura Hash por Id. O(n)
 	 */
 	private void addTareasHash(List<Tarea>listaTareas){
 		for (Tarea t : listaTareas) {
-			hashTarea.put(t.getId(), t);
+			hashTarea.put(t.getId(), t.getCopia());//consultar aca!!!! lo dejo con copia o no??? 
 		}
 	}
 	
@@ -127,66 +130,74 @@ public class Servicios {
 	private void addCritica(List<Tarea> listaTareas){
 		for (Tarea t : listaTareas) {
 				if(t.isCritica()){
-					esCritica.add(t);
+					esCritica.add(t.getCopia());
 				}else{
-					noEsCritica.add(t);
+					noEsCritica.add(t.getCopia());
 				}
 			}
 		}
 	
-
-	public Solucion backtraking (int tiempoX){//tiempoX:valor que se establece para limite procesadores no refrigerados
-		int index=0;
+	/*
+	 * 
+	 */
+	public Solucion backtraking (int limiteTprocNoRefrig){//limiteTprocNoRefrig:valor que se establece para limite procesadores no refrigerados
 		Solucion solucionActual = new Solucion(procesadores,0);
-		Solucion mejorSolucion = new Solucion(5000);
+		Solucion solucion = new Solucion(5000);
 		List<Tarea>tareasXasignar=new ArrayList<>(listaTareasOrdenada);
-		backtraking(tiempoX,index,solucionActual,mejorSolucion,tareasXasignar);
-		
-		return mejorSolucion;	
+		backtraking(limiteTprocNoRefrig,0,solucionActual,solucion,tareasXasignar);
+		return solucion;	
 	}
 
 
-	private void backtraking(int tiempoX, int index, Solucion estadoActual, Solucion mejorSolucion, List<Tarea>tareasXasignar){
+	private void backtraking(int limiteTprocNoRefrig, int index, Solucion estadoActual, Solucion solucion, List<Tarea>tareasXasignar){
 		
-		if(index==tareasXasignar.size()){//llegue al final de la lista tareasXasignar
-			if(estadoActual.getTiempoMaxEjec()< mejorSolucion.getTiempo()){
-				mejorSolucion.removeAll();
-				mejorSolucion.addAll(estadoActual.getListProcesadores());
-				mejorSolucion.setTiempo(estadoActual.getTiempoMaxEjec());
-				mejorSolucion.setCantEstados(estadoActual.cantEstados());
-				estadoActual.setTiempo(0);
+		if(index==tareasXasignar.size()){//no hay mas tareas por asignar
+			if(estadoActual.esSolucion(solucion)){
+			operarSolucion(estadoActual,solucion);
 			}
-		}else{
+		} else{
 			Tarea siguiente= tareasXasignar.get(index);
-
 			Iterator<Procesador> procesadores = estadoActual.getProcesadores();
-
+			
 			while (procesadores.hasNext()) {
-
 				Procesador p = procesadores.next();
-				//controlo tiempo ejecucion si tarea va hacia procesador "no refrigerado"
-				if(!p.exedeTiempoEjec(tiempoX, siguiente)){
-					//poda (procesador que agrega tarea no debe superar el menor registro maximo de ejecucion)
-					if(p.getTiempoTotal()+siguiente.getTiempo()<mejorSolucion.getTiempo()){
-						//asigno tarea y actualizo cant estados
-						p.asignarTarea(siguiente);
-						estadoActual.addEstado();
-						//actualizo a siguiente tarea
-						backtraking(tiempoX, index+1, estadoActual, mejorSolucion, tareasXasignar);
-						//deshago actualizaciones
-						p.removerTarea(siguiente);
-						
-						
-					}
-
+				if(cumpleRestriccion(p, limiteTprocNoRefrig, siguiente)&&!poda(p, siguiente, solucion)){
+					asignarTarea(p,siguiente,estadoActual);
+					backtraking(limiteTprocNoRefrig, index+1, estadoActual, solucion, tareasXasignar);
+					desasignarTarea(p,siguiente);	
 				}
 			}
-
-		}estadoActual.setTiempo(0);
-
-
+		}
+		//estadoActual.setTiempo(0);
 	}
+
+	private void operarSolucion(Solucion nuevaSolucion, Solucion anteriorSolucion){
+		anteriorSolucion.removeAll();
+		anteriorSolucion.addAll(nuevaSolucion.getListProcesadores());
+		anteriorSolucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
+		anteriorSolucion.setCantEstados(nuevaSolucion.cantEstados());
+		nuevaSolucion.setTiempo(0);
 	}
+
+	private boolean cumpleRestriccion(Procesador p, int limiteTprocNoRefrig, Tarea t){
+		return !p.exedeTiempoEjec(limiteTprocNoRefrig, t);
+	}
+
+	private boolean poda(Procesador p, Tarea t, Solucion s){
+		return (p.getTiempoTotal()+t.getTiempo())>s.getTiempo();
+	}
+
+	private void asignarTarea(Procesador p, Tarea t,Solucion s){
+		p.asignarTarea(t);
+		s.addEstado();
+	}
+
+	private void desasignarTarea(Procesador p, Tarea t){
+		p.removerTarea(t);
+	}
+
+
+}
 
 
 

@@ -11,7 +11,7 @@ public class Procesador {
     private int anio;
     private List<Tarea>tareasAsignadas;
     private int tiempoTotal;
-    private int tareasCriticas;
+    private int cantCriticas;
 
     public Procesador(String id_procesador, String codigo_procesador, boolean esta_refrigerado, int anio) {
        
@@ -20,7 +20,7 @@ public class Procesador {
         this.esta_refrigerado = esta_refrigerado;
         this.anio = anio;
         this.tiempoTotal=0;
-        this.tareasCriticas=0;
+        this.cantCriticas=0;
         this.tareasAsignadas=new ArrayList<>();
     }
 
@@ -42,7 +42,7 @@ public class Procesador {
 
     public void asignarTarea(Tarea t){
         if(t.isCritica()){
-            tareasCriticas++;
+            cantCriticas++;
         }
         tiempoTotal+=t.getTiempo();
         tareasAsignadas.add(t);
@@ -53,12 +53,12 @@ public class Procesador {
     }
 
     public int getTareasCriticas(){
-        return tareasCriticas;
+        return cantCriticas;
     }
 
     public void removerTarea(Tarea t){
         if(t.isCritica()){
-            tareasCriticas--;
+            cantCriticas--;
         }
         tiempoTotal-=t.getTiempo();
         tareasAsignadas.remove(t);
@@ -78,7 +78,7 @@ public class Procesador {
         }
         Procesador copia = new Procesador(this.id_procesador, this.codigo_procesador, this.esta_refrigerado, this.anio);
         copia.tiempoTotal=this.tiempoTotal;
-        copia.tareasCriticas=this.tareasCriticas;
+        copia.cantCriticas=this.cantCriticas;
         copia.tareasAsignadas=aux;
 
         return copia;
@@ -91,7 +91,7 @@ public class Procesador {
                 ", esta_refrigerado=" + esta_refrigerado +
                 ", anio=" + anio +"\n"+
                 ", tiempoTotal=" + tiempoTotal +
-                ", tareasCriticas=" + tareasCriticas +
+                ", cantCriticas=" + cantCriticas +
                 ", tareasAsignadas:\n";
 
                 for(Tarea tarea : tareasAsignadas) {
