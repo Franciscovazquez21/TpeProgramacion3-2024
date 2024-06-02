@@ -6,26 +6,23 @@ import java.util.List;
 
 public class Solucion {
     
-    //contiene la lista de procesadores y los parametros que representan la solucion en backtraking        
+    //contiene la lista de procesadores y los parametros que representan la solucion        
     private List<Procesador> procesadores;
     private int tiempoMaxEjec;
     private static int cantEstados;
 
-    //constructor 1 (utilizado para iniciar estadoActual)
-    public Solucion(List<Procesador>procesadores, int tiempoMaxEjec){
+    //constructor 1 (para iniciar estadoActual)
+    public Solucion(List<Procesador>procesadores){
         this.procesadores=procesadores;
-        this.tiempoMaxEjec=tiempoMaxEjec;
+        this.tiempoMaxEjec=0;
     }
-    //constructor 2 (utilizado para inciar estadoSolucion)
+
+    //constructor 2 (para inciar estadoSolucion)
     public Solucion(int tiempoMaxEjec){
         this.tiempoMaxEjec=tiempoMaxEjec;
         this.procesadores=new ArrayList<>();
     }
-
-    public Solucion(List<Procesador>procesadores){
-        this.procesadores=procesadores;
-    }
-
+    
     //compara tiempos maximos de soluciones
     public boolean esSolucion(Solucion s){
         if(s.getTiempo()==-1){

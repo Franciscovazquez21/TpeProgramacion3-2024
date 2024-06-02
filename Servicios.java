@@ -2,7 +2,6 @@ package TPE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class Servicios {
 			Tarea t= hashTarea.get(ID);
 			return new Tarea(t.getId(),t.getNombre(),t.getTiempo(),t.isCritica(),t.getPrioridad());//devuelvo copia 
 		}else{
-			return null;//devolvemos null?????
+			return null;
 		}
 	}
 		
@@ -141,27 +140,27 @@ public class Servicios {
 			}
 		}
 	
+	/*
+	 * 
+	 */
+	public Solucion backtraking (int limiteTprocNoRefrig){//limiteTprocNoRefrig:valor que se establece para limite procesadores no refrigerados
+		Solucion solucionActual = new Solucion(procesadores);
+		Solucion solucion = new Solucion(-1);
+		List<Tarea>tareasXasignar=new ArrayList<>(listaTareasOrdenada);
+		//backtraking(limiteTprocNoRefrig,solucionActual,solucion,tareasXasignar);
+		Backtraking back = new Backtraking();
+		return back.backtraking(limiteTprocNoRefrig,solucionActual,solucion,tareasXasignar);	
+	}
+
+	
 	public Solucion greedy(int tiempoNoRefrig){
 		Greedy greedy = new Greedy(procesadores);
 		Solucion sol = greedy.greedy(listaTareasOrdenada, tiempoNoRefrig);
 		return sol;
 	}
 
-
-
-	/*
-	 * 
-	 */
-	public Solucion backtraking (int limiteTprocNoRefrig){//limiteTprocNoRefrig:valor que se establece para limite procesadores no refrigerados
-		Solucion solucionActual = new Solucion(procesadores,0);
-		Solucion solucion = new Solucion(-1);
-		List<Tarea>tareasXasignar=new ArrayList<>(listaTareasOrdenada);
-		backtraking(limiteTprocNoRefrig,solucionActual,solucion,tareasXasignar);
-		return solucion;	
-	}
-
 	
-	private void backtraking(int limiteTprocNoRefrig, Solucion estadoActual, Solucion solucion, List<Tarea>tareasXasignar){
+	/*private void backtraking(int limiteTprocNoRefrig, Solucion estadoActual, Solucion solucion, List<Tarea>tareasXasignar){
 		Solucion.incrementarEstado();
 		if(tareasXasignar.isEmpty()){//no hay mas tareas por asignar
 			if(estadoActual.esSolucion(solucion)){
@@ -188,7 +187,6 @@ public class Servicios {
 		solucion.removeAll();
 		solucion.addAll(nuevaSolucion.getCopiaProcesadores());
 		solucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
-		//solucion.setCantEstados(nuevaSolucion.cantEstados());
 		solucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
 	}
 
@@ -211,7 +209,7 @@ public class Servicios {
 	private void desasignarTarea(Procesador p, Tarea t,List<Tarea>tareas){
 		p.removerTarea(t);
 		tareas.add(t);
-	}
+	}*/
 
 
 }

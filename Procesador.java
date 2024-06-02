@@ -12,6 +12,7 @@ public class Procesador {
     private List<Tarea> tareasAsignadas;
     private int tiempoTotal;
     private int cantCriticas;
+    private int maxCriticas;
 
     public Procesador(String idProcesador, String codProcesador, boolean esRefrigerado, int anio) {
         
@@ -19,9 +20,49 @@ public class Procesador {
         this.codProcesador = codProcesador;
         this.esRefrigerado = esRefrigerado;
         this.anio = anio;
+        this.tareasAsignadas = new ArrayList<>();
         this.tiempoTotal = 0;
         this.cantCriticas = 0;
-        this.tareasAsignadas = new ArrayList<>();
+        this.maxCriticas=2;
+    }
+
+    //limite de tiempo y cant max tareas criticas que pueda procesar
+    public boolean cumpleRestriccion (Tarea t, int limiteTprocNoRefrig){
+        return (!this.exedeTiempoEjec(limiteTprocNoRefrig, t)&&this.getTareasCriticas()<maxCriticas);
+    }
+
+    //funciones de asignacion y designacion de tareas
+    public void asignarTarea(Tarea t) {
+        if (t.isCritica()) {
+            cantCriticas++;//actualiza tareas criticas asignadas
+        }
+        tiempoTotal += t.getTiempo();
+        tareasAsignadas.add(t);
+    }
+
+    public void removerTarea(Tarea t) {
+        if (t.isCritica()) {
+            cantCriticas--;
+        }
+        tiempoTotal -= t.getTiempo();
+        tareasAsignadas.remove(t);
+    }
+
+    //control para equipos no refrigerados, tiempoX (limite de carga por tarea)
+    public boolean exedeTiempoEjec(int tiempoX, Tarea t) {
+        if (!this.isEsRefrigerado()) {
+            return tiempoX < t.getTiempo();
+        }
+        return false;
+    }
+
+    //geters
+    public int getTiempoTotal() {
+        return tiempoTotal;
+    }
+
+    public int getTareasCriticas() {
+        return cantCriticas;
     }
 
     public String getidProcesador() {
@@ -40,38 +81,7 @@ public class Procesador {
         return anio;
     }
 
-    public void asignarTarea(Tarea t) {
-        if (t.isCritica()) {
-            cantCriticas++;
-        }
-        tiempoTotal += t.getTiempo();
-        tareasAsignadas.add(t);
-    }
-
-    public int getTiempoTotal() {
-        return tiempoTotal;
-    }
-
-    public int getTareasCriticas() {
-        return cantCriticas;
-    }
-
-    public void removerTarea(Tarea t) {
-        if (t.isCritica()) {
-            cantCriticas--;
-        }
-        tiempoTotal -= t.getTiempo();
-        tareasAsignadas.remove(t);
-    }
-
-    // control para equipos no refrigerados
-    public boolean exedeTiempoEjec(int tiempoX, Tarea t) {
-        if (!this.isEsRefrigerado()) {
-            return tiempoX < t.getTiempo();
-        }
-        return false;
-    }
-
+    //copia en profundidad
     public Procesador getCopia() {
         List<Tarea> aux = new ArrayList<>();
         for (Tarea tarea : tareasAsignadas) {
@@ -100,7 +110,6 @@ public class Procesador {
             result += "-----------------------------------------------------------------------------------|\n";
         }
         return result;
-
     }
 
 }

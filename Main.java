@@ -12,16 +12,22 @@ public class Main {
 		for (Tarea tarea : listaServicio3) {
 				System.out.println(tarea);
 		}*/
-		/* 
-		Solucion sol = servicios.backtraking(200);
-		if(sol.getTiempo()!=-1){
-			System.out.println(sol);
+		//--------------------solucion backtraking---------------------
+		System.out.println("Resultado Solucion Backtraking");
+		Solucion solucionBacktraking = servicios.backtraking(200);
+		if(solucionBacktraking.getTiempo()!=-1){
+			System.out.println(solucionBacktraking);
 		}else{
-			System.out.println("no hay solucion");	
-		}*/
-
-		Solucion soluc= servicios.greedy(200);
-		System.out.println(soluc);
+			System.out.println("No hay solucion");	
+		}
+		//--------------------solucion greedy------------------------
+		Solucion solucionGreedy= servicios.greedy(200);
+		System.out.println("Resultado Solucion Greedy");
+		if(solucionGreedy!=null){
+			System.out.println(solucionGreedy);
+		}else{
+			System.out.println("No hay solucion");	
+		}
 		
 	}
 }
