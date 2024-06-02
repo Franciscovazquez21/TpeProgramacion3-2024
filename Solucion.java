@@ -9,18 +9,21 @@ public class Solucion {
     //contiene la lista de procesadores y los parametros que representan la solucion en backtraking        
     private List<Procesador> procesadores;
     private int tiempoMaxEjec;
-    private int cantEstados;
+    private static int cantEstados;
 
     //constructor 1 (utilizado para iniciar estadoActual)
     public Solucion(List<Procesador>procesadores, int tiempoMaxEjec){
         this.procesadores=procesadores;
         this.tiempoMaxEjec=tiempoMaxEjec;
-        this.cantEstados=0;
     }
     //constructor 2 (utilizado para inciar estadoSolucion)
     public Solucion(int tiempoMaxEjec){
         this.tiempoMaxEjec=tiempoMaxEjec;
         this.procesadores=new ArrayList<>();
+    }
+
+    public Solucion(List<Procesador>procesadores){
+        this.procesadores=procesadores;
     }
 
     //compara tiempos maximos de soluciones
@@ -62,24 +65,9 @@ public class Solucion {
         this.tiempoMaxEjec=tiempo;
     }
     
-    //estados generados
-    public int cantEstados(){
-        return cantEstados;
-    }
-
-    //actualizar estado
-    public void setCantEstados(int estado){
-        this.cantEstados=estado;
-    }
-
     //incrementar estado
-    public void addEstado(){
+    public static void incrementarEstado(){
         cantEstados++;
-    }
-
-    //decrementar estado
-    public void removeEstado(){
-        cantEstados--;
     }
 
     //procesadores para iterar

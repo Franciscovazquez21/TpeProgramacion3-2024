@@ -12,9 +12,16 @@ public class Main {
 		for (Tarea tarea : listaServicio3) {
 				System.out.println(tarea);
 		}*/
-
+		/* 
 		Solucion sol = servicios.backtraking(200);
+		if(sol.getTiempo()!=-1){
 			System.out.println(sol);
+		}else{
+			System.out.println("no hay solucion");	
+		}*/
+
+		Solucion soluc= servicios.greedy(200);
+		System.out.println(soluc);
 		
 	}
 }

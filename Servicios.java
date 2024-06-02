@@ -25,6 +25,10 @@ public class Servicios {
 	//estructura procesadores
 	private List<Procesador>procesadores;
 
+	public List<Procesador> get(){
+		return procesadores;
+	}
+
 	/*
      * Complejidad computacional constructor Servicios = O(n).
      */
@@ -137,6 +141,14 @@ public class Servicios {
 			}
 		}
 	
+	public Solucion greedy(int tiempoNoRefrig){
+		Greedy greedy = new Greedy(procesadores);
+		Solucion sol = greedy.greedy(listaTareasOrdenada, tiempoNoRefrig);
+		return sol;
+	}
+
+
+
 	/*
 	 * 
 	 */
@@ -144,29 +156,29 @@ public class Servicios {
 		Solucion solucionActual = new Solucion(procesadores,0);
 		Solucion solucion = new Solucion(-1);
 		List<Tarea>tareasXasignar=new ArrayList<>(listaTareasOrdenada);
-		backtraking(limiteTprocNoRefrig,0,solucionActual,solucion,tareasXasignar);
+		backtraking(limiteTprocNoRefrig,solucionActual,solucion,tareasXasignar);
 		return solucion;	
 	}
 
-
-	private void backtraking(int limiteTprocNoRefrig, int index, Solucion estadoActual, Solucion solucion, List<Tarea>tareasXasignar){
-		estadoActual.addEstado();
-		if(index==tareasXasignar.size()){//no hay mas tareas por asignar
+	
+	private void backtraking(int limiteTprocNoRefrig, Solucion estadoActual, Solucion solucion, List<Tarea>tareasXasignar){
+		Solucion.incrementarEstado();
+		if(tareasXasignar.isEmpty()){//no hay mas tareas por asignar
 			if(estadoActual.esSolucion(solucion)){
 			operarSolucion(estadoActual,solucion);
 			}
 		} else{
-			Tarea siguiente= tareasXasignar.get(index);
+			Tarea siguiente= tareasXasignar.get(0);
 			Iterator<Procesador> procesadores = estadoActual.getProcesadores();
 			
 			while (procesadores.hasNext()) {
 				Procesador p = procesadores.next();
 				if(cumpleRestriccion(p, limiteTprocNoRefrig, siguiente)){
-					asignarTarea(p,siguiente,estadoActual);
+					asignarTarea(p,siguiente,tareasXasignar);
 					if(!poda(p, siguiente, solucion)){
-						backtraking(limiteTprocNoRefrig, index+1, estadoActual, solucion, tareasXasignar);
+						backtraking(limiteTprocNoRefrig, estadoActual, solucion, tareasXasignar);
 					}
-					desasignarTarea(p,siguiente,estadoActual);
+					desasignarTarea(p,siguiente,tareasXasignar);
 				}
 			}
 		}
@@ -176,7 +188,7 @@ public class Servicios {
 		solucion.removeAll();
 		solucion.addAll(nuevaSolucion.getCopiaProcesadores());
 		solucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
-		solucion.setCantEstados(nuevaSolucion.cantEstados());
+		//solucion.setCantEstados(nuevaSolucion.cantEstados());
 		solucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
 	}
 
@@ -191,13 +203,14 @@ public class Servicios {
 		return (p.getTiempoTotal()+t.getTiempo())>s.getTiempo();
 	}
 
-	private void asignarTarea(Procesador p, Tarea t,Solucion s){
+	private void asignarTarea(Procesador p, Tarea t,List<Tarea>tareas){
 		p.asignarTarea(t);
+		tareas.remove(t);
 	}
 
-	private void desasignarTarea(Procesador p, Tarea t, Solucion s){
+	private void desasignarTarea(Procesador p, Tarea t,List<Tarea>tareas){
 		p.removerTarea(t);
-		s.removeEstado();
+		tareas.add(t);
 	}
 
 
