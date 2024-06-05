@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Greedy {
-
+    //la lista se recibe ordenada de mayor a menor tiempo.
     private List<Procesador>procesadores;
     private static int candidatosConsiderados;
 
