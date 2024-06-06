@@ -1,17 +1,34 @@
 package TPE;
 
+import java.util.List;
+
 public class Main {
 
 	public static void main(String args[]) {
 		
 		Servicios servicios = new Servicios("./TPE/datasets/Procesadores.csv", "./TPE/datasets/Tareas.csv");
-		/*Tarea t= servicios.servicio1("T1");
-		System.out.println(t);
-		List<Tarea>listaServicio2=servicios.servicio2(false);
-		List<Tarea>listaServicio3=servicios.servicio3(29,50);
-		for (Tarea tarea : listaServicio3) {
-				System.out.println(tarea);
-		}*/
+		//---------------------servicio1---------------------------------
+		String id="T1";
+		Tarea t= servicios.servicio1(id);
+		if(t!=null){
+			System.out.println(t);
+		}else{
+			System.out.println("No existe tarea con id: "+id);
+		}
+		//--------------------servicio2---------------------------------
+		List<Tarea>listaServicio2=servicios.servicio2(true);
+		for (Tarea tarea : listaServicio2) {
+			System.out.println(tarea);
+		}
+		//--------------------servicio3----------------------------------
+		List<Tarea>listaServicio3=servicios.servicio3(22,70);
+		if(listaServicio3!=null){
+			for (Tarea tarea : listaServicio3) {
+					System.out.println(tarea);
+			}
+		}else{
+			System.out.println("el rango elegido es incorrecto o inexistente");
+		}
 		//--------------------solucion backtraking---------------------
 		System.out.println("Resultado Solucion Backtraking");
 		Solucion solucionBacktraking = servicios.backtraking(200);

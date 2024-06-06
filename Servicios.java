@@ -18,7 +18,7 @@ public class Servicios {
 	private Map<String,Tarea>hashTarea;//utilizada para servicio 1 (clave "ID", valor "Tarea")
 	private List<Tarea>esCritica;//utilizada para servicio 2
 	private List<Tarea>noEsCritica;
-	private List<Tarea>tareas;//utilizada en servicio 3,(se recibe ordenada por prioridad en constructor desde CSV)
+	private ArrayList<Tarea>tareas;//utilizada en servicio 3,(se recibe ordenada por prioridad en constructor desde CSV)
 	private List<Procesador>procesadores;//se reciben en constructor
 
 	/*
@@ -64,14 +64,14 @@ public class Servicios {
 	public List<Tarea> servicio3(int prioridadInferior, int prioridadSuperior) {
 		//control parametros incorrectos
 		if(prioridadInferior>prioridadSuperior){
-			return List.of();
+			return null;
 		}
 
 		int indiceMenor=buscarIndice(prioridadInferior,0,tareas.size()-1,true);
 		int indiceMayor=buscarIndice(prioridadSuperior,0,tareas.size()-1,false);
 		
 		if (indiceMenor == -1 || indiceMayor == -1) {
-            return List.of(); // Devuelve una lista vacía si no hay tareas en el rango
+            return null;
         }
 		return tareas.subList(indiceMenor, indiceMayor+1);
 	}
@@ -137,7 +137,7 @@ public class Servicios {
 	public Solucion backtraking (int limiteTprocNoRefrig){//parametro limite procesadores no refrigerados
 		Solucion solucionActual = new Solucion(procesadores);
 		Solucion solucion = new Solucion(-1);//valor defecto solucion hasta encontrar un estado final/solucion
-		List<Tarea>tareasXasignar=new ArrayList<>(tareas);
+		List<Tarea>tareasXasignar=new LinkedList<>(tareas);
 		Backtraking back = new Backtraking();
 		return back.backtraking(limiteTprocNoRefrig,solucionActual,solucion,tareasXasignar);	
 	}

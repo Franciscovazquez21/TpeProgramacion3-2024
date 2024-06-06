@@ -42,10 +42,10 @@ public class Tarea implements Comparable<Tarea> {
         return new Tarea(this.id,this.nombre,this.tiempo,this.critica,this.prioridad);
     }
     
-    //implementado para que CSV devuelva tareas ordenadas
+    //implementado para que CSV devuelva tareas ordenadas por prioridad
     @Override
     public int compareTo(Tarea t) {
-        return this.getPrioridad()-t.getPrioridad();
+        return this.getPrioridad().compareTo(t.getPrioridad());
     }
 
     public String toString(){
@@ -53,6 +53,4 @@ public class Tarea implements Comparable<Tarea> {
                 ", Tiempo: "+this.getTiempo()+", Critica: "+this.isCritica();
     }
 
-    
-    
 }

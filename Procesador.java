@@ -1,6 +1,6 @@
 package TPE;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Procesador {
@@ -20,7 +20,7 @@ public class Procesador {
         this.codProcesador = codProcesador;
         this.esRefrigerado = esRefrigerado;
         this.anio = anio;
-        this.tareasAsignadas = new ArrayList<>();
+        this.tareasAsignadas = new LinkedList<>();
         this.tiempoTotal = 0;
         this.cantCriticas = 0;
         this.maxCriticas=2;
@@ -83,7 +83,7 @@ public class Procesador {
 
     //copia en profundidad
     public Procesador getCopia() {
-        List<Tarea> aux = new ArrayList<>();
+        List<Tarea> aux = new LinkedList<>();
         for (Tarea tarea : tareasAsignadas) {
             Tarea t = tarea.getCopia();
             aux.add(t);

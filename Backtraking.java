@@ -7,7 +7,7 @@ public class Backtraking {
 
     public Solucion backtraking(int limiteTprocNoRefrig, Solucion estadoActual, Solucion solucion,List<Tarea> tareasXasignar) {
     
-    Solucion.incrementarEstado();
+    solucion.incrementarEstado();
 
         if(tareasXasignar.isEmpty()){//no hay mas tareas por asignar
             if(esSolucion(estadoActual,solucion)){

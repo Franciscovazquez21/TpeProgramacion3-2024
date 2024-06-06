@@ -6,14 +6,11 @@ import java.util.List;
 public class Greedy {
     //la lista se recibe ordenada de mayor a menor tiempo.
     private List<Procesador>procesadores;
-    private static int candidatosConsiderados;
 
     public Greedy(List<Procesador>procesadores){
         this.procesadores=procesadores;
-        candidatosConsiderados=0;
     }
-
-    
+        
     public Solucion greedy(List<Tarea>candidatos, int tiempoNoRefrig){
         
         Solucion sol= new Solucion(procesadores);
@@ -39,22 +36,18 @@ public class Greedy {
         while (it.hasNext()) {
             Procesador p = it.next();
             //si cumple restricciones y (aux es null o p tiene menos carga que aux)
+            s.incrementarEstado();
             if(cumpleRestriccion(t,p,tiempoNoRefrig)&&(aux==null||p.getTiempoTotal()<aux.getTiempoTotal())){
-                aux=p;
+                aux=p;    
             }
         }return aux;
     }
 
-    public boolean cumpleRestriccion(Tarea t , Procesador p, int tiempoNoRefrig){
+    private boolean cumpleRestriccion(Tarea t , Procesador p, int tiempoNoRefrig){
         return (p.getTareasCriticas()<2 &&!p.exedeTiempoEjec(tiempoNoRefrig, t));
     }
     
     public Tarea seleccionar(List<Tarea>candidatos){
         return candidatos.getFirst();
-    }
-
-    public static int getCandidatosConsiderados(){
-        return candidatosConsiderados;
-    }
-    
+    }    
 }

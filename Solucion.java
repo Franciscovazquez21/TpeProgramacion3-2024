@@ -1,7 +1,7 @@
 package TPE;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Solucion {
@@ -9,18 +9,20 @@ public class Solucion {
     //contiene la lista de procesadores y los parametros que representan la solucion        
     private List<Procesador> procesadores;
     private int tiempoMaxEjec;
-    private static int cantEstados;
+    private int cantEstados_candidatos;
 
     //constructor 1 (para iniciar estadoActual)
     public Solucion(List<Procesador>procesadores){
         this.procesadores=procesadores;
         this.tiempoMaxEjec=0;
+        this.cantEstados_candidatos=0;
     }
 
     //constructor 2 (para inciar estadoSolucion)
     public Solucion(int tiempoMaxEjec){
         this.tiempoMaxEjec=tiempoMaxEjec;
-        this.procesadores=new ArrayList<>();
+        this.procesadores=new LinkedList<>();
+        this.cantEstados_candidatos=0;
     }
     
     //compara tiempos maximos de soluciones
@@ -63,9 +65,11 @@ public class Solucion {
     }
     
     //incrementar estado
-    public static void incrementarEstado(){
-        cantEstados++;
+    public void incrementarEstado(){
+        cantEstados_candidatos++;
     }
+
+    
 
     //procesadores para iterar
     public Iterator<Procesador> getProcesadores(){
@@ -74,7 +78,7 @@ public class Solucion {
 
     //copia de procesadores
     public List<Procesador>getCopiaProcesadores(){
-        List<Procesador>aux=new ArrayList<>();
+        List<Procesador>aux=new LinkedList<>();
             for (Procesador procesador : procesadores) {
                 Procesador p= procesador.getCopia();
                 aux.add(p);
@@ -83,7 +87,7 @@ public class Solucion {
     }
 
     public String toString(){
-        String result="Solucion:\nTiempo maximo ejecucion:"+tiempoMaxEjec+" | Cantidad estados: "+cantEstados+"\n";
+        String result="Solucion:\nTiempo maximo ejecucion:"+tiempoMaxEjec+" | Cantidad estados: "+cantEstados_candidatos+"\n";
             for (Procesador procesador : procesadores) {
                 result+="\ncodigo Procesador"+procesador.toString();
             }
@@ -97,7 +101,7 @@ public class Solucion {
                 aux.add(p);
             }
         Solucion copia = new Solucion(aux, this.getTiempoMaxEjec());
-        copia.cantEstados=this.cantEstados;
+        copia.cantEstados_candidatos=this.cantEstados_candidatos;
         
         return copia;
     }*/
