@@ -41,7 +41,7 @@ public class Main {
 			}
 			System.out.println("");
 		}else{
-			System.out.println("el rango elegido es incorrecto o inexistente");
+			System.out.println("el rango elegido es incorrecto o inexistente.");
 		}
 		
 		//--------------------solucion backtraking---------------------
