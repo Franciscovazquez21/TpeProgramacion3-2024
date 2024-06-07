@@ -1,4 +1,4 @@
-package TPE;
+package TPE.taskprocessing;
 
 public class Tarea implements Comparable<Tarea> {
 

@@ -1,7 +1,7 @@
-package TPE;
+package TPE.taskprocessing;
 
 import java.util.Comparator;
-
+//comparador utilizado para estraegia Greedy
 public class ComparadorTareaXmaxTiempo implements Comparator<Tarea> {
 
     @Override

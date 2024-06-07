@@ -1,10 +1,16 @@
-package TPE;
+package TPE.algorithms;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import TPE.taskprocessing.ComparadorTareaXmaxTiempo;
+import TPE.taskprocessing.Procesador;
+import TPE.taskprocessing.Solucion;
+import TPE.taskprocessing.Tarea;
+
 public class Greedy {
-    //la lista se recibe ordenada de mayor a menor tiempo.
+
     private List<Procesador>procesadores;
 
     public Greedy(List<Procesador>procesadores){
@@ -12,10 +18,12 @@ public class Greedy {
     }
         
     public Solucion greedy(List<Tarea>candidatos, int tiempoNoRefrig){
-        
+        //la estrategia consta en asignar tareas de mayor a menor tiempo(se ordenan por este criterio)
+        Collections.sort(candidatos,new ComparadorTareaXmaxTiempo());
         Solucion sol= new Solucion(procesadores);
+        
         while(!candidatos.isEmpty()){
-            Tarea t = seleccionar(candidatos);
+            Tarea t = candidatos.getFirst();
             Procesador p= esFactible(t,sol,tiempoNoRefrig);
             
             if(p!=null){
@@ -35,10 +43,9 @@ public class Greedy {
         Procesador aux=null;
         while (it.hasNext()) {
             Procesador p = it.next();
-            //si cumple restricciones y (aux es null o p tiene menos carga que aux)
             s.incrementarEstado();
             if(cumpleRestriccion(t,p,tiempoNoRefrig)&&(aux==null||p.getTiempoTotal()<aux.getTiempoTotal())){
-                aux=p;    
+                aux=p;//si cumple restricciones y (aux es null o p tiene menos carga que aux)    
             }
         }return aux;
     }
@@ -46,9 +53,6 @@ public class Greedy {
     private boolean cumpleRestriccion(Tarea t , Procesador p, int tiempoNoRefrig){
         return (p.getTareasCriticas()<2 &&!p.exedeTiempoEjec(tiempoNoRefrig, t));
     }
-    
-    public Tarea seleccionar(List<Tarea>candidatos){
-        return candidatos.getFirst();
-    }    
+       
 }
 

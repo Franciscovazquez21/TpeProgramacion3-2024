@@ -1,24 +1,24 @@
-package TPE;
+package TPE.taskprocessing;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class Procesador {
 
-    private String idProcesador;
-    private String codProcesador;
-    private boolean esRefrigerado;
+    private String id;
+    private String cod;
+    private boolean refrigerado;
     private int anio;
     private List<Tarea> tareasAsignadas;
     private int tiempoTotal;
     private int cantCriticas;
     private int maxCriticas;
 
-    public Procesador(String idProcesador, String codProcesador, boolean esRefrigerado, int anio) {
+    public Procesador(String id, String cod, boolean refrigerado, int anio) {
         
-        this.idProcesador = idProcesador;
-        this.codProcesador = codProcesador;
-        this.esRefrigerado = esRefrigerado;
+        this.id = id;
+        this.cod = cod;
+        this.refrigerado = refrigerado;
         this.anio = anio;
         this.tareasAsignadas = new LinkedList<>();
         this.tiempoTotal = 0;
@@ -66,15 +66,15 @@ public class Procesador {
     }
 
     public String getidProcesador() {
-        return idProcesador;
+        return id;
     }
 
     public String getCodProcesador() {
-        return codProcesador;
+        return cod;
     }
 
     public boolean isEsRefrigerado() {
-        return esRefrigerado;
+        return refrigerado;
     }
 
     public int getAnio() {
@@ -88,7 +88,7 @@ public class Procesador {
             Tarea t = tarea.getCopia();
             aux.add(t);
         }
-        Procesador copia = new Procesador(this.idProcesador, this.codProcesador, this.esRefrigerado, this.anio);
+        Procesador copia = new Procesador(this.id, this.cod, this.refrigerado, this.anio);
         copia.tiempoTotal = this.tiempoTotal;
         copia.cantCriticas = this.cantCriticas;
         copia.tareasAsignadas = aux;
@@ -97,15 +97,14 @@ public class Procesador {
     }
 
     public String toString() {
-        String result = idProcesador + '\'' +
-                ", esRefrigerado=" + esRefrigerado +
+        String result = id + '\'' +
+                ", refrigerado=" + refrigerado +
                 ", anio=" + anio + "\n" +
                 ", tiempoTotal=" + tiempoTotal +
                 ", cantCriticas=" + cantCriticas +
                 ", tareasAsignadas:\n" +
                 "-----------------------------------------------------------------------------------\n";
         for (Tarea tarea : tareasAsignadas) {
-            result += "-----------------------------------------------------------------------------------|\n";
             result += "|tarea: " + tarea + "\n";
             result += "-----------------------------------------------------------------------------------|\n";
         }

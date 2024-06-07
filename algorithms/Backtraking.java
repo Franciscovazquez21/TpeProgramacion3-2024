@@ -1,19 +1,21 @@
-package TPE;
+package TPE.algorithms;
 
 import java.util.Iterator;
 import java.util.List;
 
+import TPE.taskprocessing.Procesador;
+import TPE.taskprocessing.Solucion;
+import TPE.taskprocessing.Tarea;
+
 public class Backtraking {
-
-    public Solucion backtraking(int limiteTprocNoRefrig, Solucion estadoActual, Solucion solucion,List<Tarea> tareasXasignar) {
     
-    solucion.incrementarEstado();
-
-        if(tareasXasignar.isEmpty()){//no hay mas tareas por asignar
+    public Solucion backtraking(int limiteTprocNoRefrig, Solucion estadoActual, Solucion solucion,List<Tarea> tareasXasignar) {
+        solucion.incrementarEstado();
+        if(tareasXasignar.isEmpty()){//no hay mas tareas por asignar,verifica si es solucion
             if(esSolucion(estadoActual,solucion)){
-                operarSolucion(estadoActual,solucion);
+                operarSolucion(estadoActual,solucion);//actualiza solucion
             }
-        } else{
+        }else{
             Tarea siguiente= tareasXasignar.get(0);
             Iterator<Procesador> procesadores = estadoActual.getProcesadores();
             

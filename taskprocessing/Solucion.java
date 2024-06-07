@@ -1,4 +1,4 @@
-package TPE;
+package TPE.taskprocessing;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -23,7 +23,7 @@ public class Solucion {
         this.tiempoMaxEjec=tiempoMaxEjec;
         this.procesadores=new LinkedList<>();
         this.cantEstados_candidatos=0;
-    }
+    }   
     
     //compara tiempos maximos de soluciones
     public boolean esSolucion(Solucion s){
@@ -69,8 +69,6 @@ public class Solucion {
         cantEstados_candidatos++;
     }
 
-    
-
     //procesadores para iterar
     public Iterator<Procesador> getProcesadores(){
         return this.procesadores.iterator();
@@ -87,23 +85,11 @@ public class Solucion {
     }
 
     public String toString(){
-        String result="Solucion:\nTiempo maximo ejecucion:"+tiempoMaxEjec+" | Cantidad estados: "+cantEstados_candidatos+"\n";
+        String result="Solucion:\nTiempo maximo ejecucion:"+tiempoMaxEjec+" | Cantidad estados_candidatos: "+cantEstados_candidatos+"\n";
             for (Procesador procesador : procesadores) {
                 result+="\ncodigo Procesador"+procesador.toString();
             }
             return result;
     }
-
-    /*public Solucion getCopia(){
-        List<Procesador>aux=new ArrayList<>();
-            for (Procesador procesador : procesadores) {
-                Procesador p= procesador.getCopia();
-                aux.add(p);
-            }
-        Solucion copia = new Solucion(aux, this.getTiempoMaxEjec());
-        copia.cantEstados_candidatos=this.cantEstados_candidatos;
-        
-        return copia;
-    }*/
 
 }

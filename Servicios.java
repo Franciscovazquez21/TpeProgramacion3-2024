@@ -1,12 +1,16 @@
 package TPE;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import TPE.algorithms.Backtraking;
+import TPE.algorithms.Greedy;
+import TPE.taskprocessing.Procesador;
+import TPE.taskprocessing.Solucion;
+import TPE.taskprocessing.Tarea;
 import TPE.utils.CSVReader;
 /**
  * NO modificar la interfaz de esta clase ni sus métodos públicos.
@@ -59,26 +63,26 @@ public class Servicios {
 	}
 		
     /*
-     * La complejidad tenporal de servicio3 es O(log n) ya que se realiza una busqueda binaria.
+     * La complejidad tenporal de servicio3 es O(n), mas alla de que es una busqueda binaria que en el mejor de los
+	 * casos es una complejidad logaritmica, se estima que para este servicio sea mas eficiente que una busqueda por
+	 * recorrido en un ciclo iterativo. Al devolver una lista, el metodo tareas.sublist() hace recorer la lista.
      */
 	public List<Tarea> servicio3(int prioridadInferior, int prioridadSuperior) {
 		//control parametros incorrectos
 		if(prioridadInferior>prioridadSuperior){
 			return null;
 		}
-
 		int indiceMenor=buscarIndice(prioridadInferior,0,tareas.size()-1,true);
 		int indiceMayor=buscarIndice(prioridadSuperior,0,tareas.size()-1,false);
-		
 		if (indiceMenor == -1 || indiceMayor == -1) {
             return null;
         }
-		return tareas.subList(indiceMenor, indiceMayor+1);
+		return tareas.subList(indiceMenor, indiceMayor+1);//lo vuelve O(n)
 	}
 
 
 	/*
-     * La complejidad temporal de buscarIndice es O(log n)resultante a una busqueda binaria
+     * La complejidad temporal de buscarIndice es O(log n)resultante a una busqueda binaria,
 	 * como en el ejercicio se pueden encontrar prioridades repetidas, se implemento una variable 
 	 * booleana "menor", buscando el extremo del indice repetido.
      */
@@ -108,6 +112,35 @@ public class Servicios {
 		}
 	}
 
+	/*
+	 * Para este servicio se exploran todas las posibles asignaciones 
+ 	 * de tareas a procesadores de manera recursiva. En cada paso, se asigna una tarea a un 
+     * procesador y se verifica si la asignación cumple con las restricciones establecidas 
+     * (por ejemplo, el límite de procesadores no refrigerados). Si se encuentra una solución 
+     * válida, se guarda y se continúa explorando otras posibles soluciones hasta que se 
+     * hayan explorado todas las opciones o se haya encontrado una solución óptima.
+	 * Para los casos que no exista solucion solucion.getTiempoMax = (-1).
+	 */
+	public Solucion backtraking (int limiteTprocNoRefrig){//parametro limite procesadores no refrigerados
+		Solucion solucionActual = new Solucion(procesadores);
+		Solucion solucion = new Solucion(-1);//valor defecto solucion hasta encontrar un estado final/solucion
+		List<Tarea>tareasXasignar=new LinkedList<>(tareas);
+		Backtraking back = new Backtraking();
+		return back.backtraking(limiteTprocNoRefrig,solucionActual,solucion,tareasXasignar);	
+	}
+
+	/*Para este servicio, se implento una estrategia que consta de ordenas las tarea de mayor a menor tiempo de ejecucion
+	  por lo que, a medida que se asignan tareas, los procesadores a los cuales se pueden asignar deber cumplir con las 
+	  restricciones y a su vez deben ser los que menos carga tengan. 
+	  Por lo que, a medida que se ingresa una tarea, la distribucion de carga de los procedadores va creciendo de manera 
+	  eficiente hasta asignar todas, si alguna tarea no encuentra procesador que pueda asignarla, no existe solucion.
+	  Para los casos que no exista solucion, solucion es "null".
+	 */
+	public Solucion greedy(int tiempoNoRefrig){
+		Greedy greedy = new Greedy(procesadores);
+		Solucion sol = greedy.greedy(tareas, tiempoNoRefrig);
+		return sol;
+	}
 
 	/*
 	 * Metodo complementario servicio 1: agrega todas las tareas a la estructura Hash por Id. O(n)
@@ -131,26 +164,6 @@ public class Servicios {
 		}
 	}
 	
-	/*
-	 * 
-	 */
-	public Solucion backtraking (int limiteTprocNoRefrig){//parametro limite procesadores no refrigerados
-		Solucion solucionActual = new Solucion(procesadores);
-		Solucion solucion = new Solucion(-1);//valor defecto solucion hasta encontrar un estado final/solucion
-		List<Tarea>tareasXasignar=new LinkedList<>(tareas);
-		Backtraking back = new Backtraking();
-		return back.backtraking(limiteTprocNoRefrig,solucionActual,solucion,tareasXasignar);	
-	}
-
 	
-	public Solucion greedy(int tiempoNoRefrig){
-		Collections.sort(tareas,new ComparadorTareaXmaxTiempo());
-		Greedy greedy = new Greedy(procesadores);
-		Solucion sol = greedy.greedy(tareas, tiempoNoRefrig);
-		return sol;
-	}
-
+	
 }
-
-
-

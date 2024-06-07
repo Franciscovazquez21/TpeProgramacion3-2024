@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import TPE.Procesador;
-import TPE.Tarea;
+import TPE.taskprocessing.Procesador;
+import TPE.taskprocessing.Tarea;
 
 
 public class CSVReader {
@@ -41,7 +41,7 @@ public class CSVReader {
 			listaTareas.add(t);
 			//listaTareas.put(id, t);
 		}
-		 // Ordenando la lista de tareas por prioridad usando Comparator
+		 //se devuelve tareas ordenadas por prioridad
         Collections.sort(listaTareas);
 		
 		return listaTareas;
@@ -63,8 +63,6 @@ public List<Procesador> readProcessors(String processorPath) {
 			Boolean refrigerado = Boolean.parseBoolean(line[2].trim());
 			Integer anio = Integer.parseInt(line[3].trim());
 			// Aca instanciar lo que necesiten en base a los datos leidos
-
-			//habria que instanciar un objeto procesador
 			Procesador p = new Procesador(id, codigo, refrigerado, anio);
 			listaProcesadores.add(p);
 		}
