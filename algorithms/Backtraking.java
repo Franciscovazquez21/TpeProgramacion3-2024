@@ -21,9 +21,9 @@ public class Backtraking {
             
             while (procesadores.hasNext()) {
                 Procesador p = procesadores.next();
-                if(p.cumpleRestriccion(siguiente, limiteTprocNoRefrig)){
+                if(p.cumpleRestriccion(limiteTprocNoRefrig, siguiente)){
                     asignarTarea(p,siguiente,tareasXasignar);
-                    if(!poda(p, siguiente, solucion)){
+                    if(!poda(p, solucion)){
                         backtraking(limiteTprocNoRefrig, estadoActual, solucion, tareasXasignar);
                     }
                     retirarTarea(p,siguiente,tareasXasignar);
@@ -47,7 +47,6 @@ public class Backtraking {
         solucion.removeAll();
         solucion.addAll(nuevaSolucion.getCopiaProcesadores());
         solucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
-        solucion.setTiempo(nuevaSolucion.getTiempoMaxEjec());
     }
 
     //asignaciones y designaciones de tareas
@@ -62,11 +61,11 @@ public class Backtraking {
     }
 
     //poda 
-    private boolean poda(Procesador p, Tarea t, Solucion s){
+    private boolean poda(Procesador p, Solucion s){
         if(s.getTiempo()==-1){//compara mientras no haya ningun estado solucion
             return false;
         }
-        return (p.getTiempoTotal()+t.getTiempo())>s.getTiempo();
+        return (p.getTiempoTotal()>s.getTiempo());
     }
         
 }

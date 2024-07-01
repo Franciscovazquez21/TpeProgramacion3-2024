@@ -44,15 +44,10 @@ public class Greedy {
         while (it.hasNext()) {
             Procesador p = it.next();
             s.incrementarEstado();
-            if(cumpleRestriccion(t,p,tiempoNoRefrig)&&(aux==null||p.getTiempoTotal()<aux.getTiempoTotal())){
+            if(p.cumpleRestriccion(tiempoNoRefrig, t)&&(aux==null||p.getTiempoTotal()<aux.getTiempoTotal())){
                 aux=p;//si cumple restricciones y (aux es null o p tiene menos carga que aux)    
             }
         }return aux;
-    }
-
-    private boolean cumpleRestriccion(Tarea t , Procesador p, int tiempoNoRefrig){
-        return (p.getTareasCriticas()<2 &&!p.exedeTiempoEjec(tiempoNoRefrig, t));
-    }
-       
+    }       
 }
 

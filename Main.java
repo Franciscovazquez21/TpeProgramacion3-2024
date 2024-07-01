@@ -34,8 +34,8 @@ public class Main {
 		//--------------------servicio3----------------------------------
 		System.out.println("\n-----------------------------Servicio 3----------------------------------------");
 		
-		List<Tarea>listaServicio3=servicios.servicio3(22,70);
-		if(listaServicio3!=null){
+		List<Tarea>listaServicio3=servicios.servicio3(30,60);
+		if(!listaServicio3.isEmpty()){
 			for (Tarea tarea : listaServicio3) {
 					System.out.println(tarea);
 			}
@@ -43,18 +43,17 @@ public class Main {
 		}else{
 			System.out.println("el rango elegido es incorrecto o inexistente.");
 		}
-		
 		//--------------------solucion backtraking---------------------
 		System.out.println("\n------------------------Resultado Solucion Bactraking------------------------------");
 
-		Solucion solucionBacktraking = servicios.backtraking(200);
+		Solucion solucionBacktraking = servicios.backtraking(10);
 		if(solucionBacktraking.getTiempo()!=(-1)){
 			System.out.println(solucionBacktraking);
 		}else{
 			System.out.println("\nNo hay solucion");	
 		}
 		//--------------------solucion greedy------------------------
-		Solucion solucionGreedy= servicios.greedy(200);
+		Solucion solucionGreedy= servicios.greedy(10);
 		
 		System.out.println("\n------------------------Resultado Solucion Greedy----------------------------------");
 		if(solucionGreedy!=null){
@@ -62,6 +61,5 @@ public class Main {
 		}else{
 			System.out.println("\nNo hay solucion");	
 		}
-		
 	}
 }

@@ -27,8 +27,11 @@ public class Procesador {
     }
 
     //limite de tiempo y cant max tareas criticas que pueda procesar
-    public boolean cumpleRestriccion (Tarea t, int limiteTprocNoRefrig){
-        return (!this.exedeTiempoEjec(limiteTprocNoRefrig, t)&&this.getTareasCriticas()<maxCriticas);
+    public boolean cumpleRestriccion (int limiteTprocNoRefrig, Tarea t){
+        if(this.getTareasCriticas()<maxCriticas){
+            return !this.exedeTiempoEjec(limiteTprocNoRefrig, t);
+        }
+        return false;
     }
 
     //funciones de asignacion y designacion de tareas
@@ -48,10 +51,10 @@ public class Procesador {
         tareasAsignadas.remove(t);
     }
 
-    //control para equipos no refrigerados, tiempoX (limite de carga por tarea)
+    //control para equipos no refrigerados, tiempoX (limite de carga por procesador)
     public boolean exedeTiempoEjec(int tiempoX, Tarea t) {
         if (!this.isEsRefrigerado()) {
-            return tiempoX < t.getTiempo();
+            return tiempoX < this.getTiempoTotal()+t.getTiempo();
         }
         return false;
     }
@@ -63,6 +66,10 @@ public class Procesador {
 
     public int getTareasCriticas() {
         return cantCriticas;
+    }
+
+    public int getMaxCriticas(){
+        return maxCriticas;
     }
 
     public String getidProcesador() {

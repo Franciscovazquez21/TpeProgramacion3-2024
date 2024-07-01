@@ -56,60 +56,23 @@ public class Servicios {
      */
 	public List<Tarea> servicio2(boolean esCritica) {
 		if(esCritica){
-			return new LinkedList<Tarea>(this.esCritica);
+			return this.esCritica;
 		}else{
-			return new LinkedList<Tarea>(this.noEsCritica);
+			return this.noEsCritica;
 		}
 	}
 		
     /*
-     * La complejidad tenporal de servicio3 es O(n), mas alla de que es una busqueda binaria que en el mejor de los
-	 * casos es una complejidad logaritmica, se estima que para este servicio sea mas eficiente que una busqueda por
-	 * recorrido en un ciclo iterativo. Al devolver una lista, el metodo tareas.sublist() hace recorer la lista.
+     * La complejidad temporal de servicio3 es O(n)
      */
 	public List<Tarea> servicio3(int prioridadInferior, int prioridadSuperior) {
-		//control parametros incorrectos
-		if(prioridadInferior>prioridadSuperior){
-			return null;
-		}
-		int indiceMenor=buscarIndice(prioridadInferior,0,tareas.size()-1,true);
-		int indiceMayor=buscarIndice(prioridadSuperior,0,tareas.size()-1,false);
-		if (indiceMenor == -1 || indiceMayor == -1) {
-            return null;
-        }
-		return tareas.subList(indiceMenor, indiceMayor+1);//lo vuelve O(n)
-	}
-
-
-	/*
-     * La complejidad temporal de buscarIndice es O(log n)resultante a una busqueda binaria,
-	 * como en el ejercicio se pueden encontrar prioridades repetidas, se implemento una variable 
-	 * booleana "menor", buscando el extremo del indice repetido.
-     */
-	private int buscarIndice(int valor, int inicio , int fin,boolean menor){
-		if(inicio>fin){
-			return -1;
-		}
-		int medio = (inicio+fin)/2;
-		//control de Tareas con igual prioridad, se busca hasta la frontera.
-		if(tareas.get(medio).getPrioridad()==valor){
-			if(menor){//busqueda prioridad indiceMayor
-				while(medio>0&&tareas.get(medio-1).getPrioridad()==valor){
-					medio--;
-				}		
-			}else{//busqueda prioridad indiceMenor
-				while(medio<tareas.size()-1&&tareas.get(medio+1).getPrioridad()==valor){
-					medio++;
-				}
+		List<Tarea>result=new LinkedList<>();
+		for(Tarea t : tareas){
+			if(t.getPrioridad()>=prioridadInferior && t.getPrioridad()<=prioridadSuperior){
+				result.add(t);
 			}
-			return medio;
-		}//busqueda recursiva por derecha
-		else if(tareas.get(medio).getPrioridad()<valor){
-			return buscarIndice(valor, medio+1, fin,menor);
 		}
-		else{//busqueda recursiva por izquierda
-			return buscarIndice(valor, inicio, medio-1,menor);
-		}
+		return result;
 	}
 
 	/*
