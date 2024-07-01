@@ -24,9 +24,12 @@ public class Servicios {
 	private List<Tarea>noEsCritica;
 	private ArrayList<Tarea>tareas;//utilizada en servicio 3,(se recibe ordenada por prioridad en constructor desde CSV)
 	private List<Procesador>procesadores;//se reciben en constructor
-
-	/*
+	
+     /*
      * Complejidad computacional constructor Servicios = O(n).
+     * las desiciones de implementar estructuras distintas para poder ofrecer un servicio con complejidad mas optima, tiene como consecuencia
+     * que la utilización de memoria es mayor. La eleccion de modificar la complejidad con tal de utilizar la menor memoria o bien viceversa depende 
+     * del dominio. Para este caso, preferimos establecer prioridad en la complejidad de los servicios y asumir que la memoria no es un impedimento.
      */
 	public Servicios(String pathProcesadores, String pathTareas){
 		CSVReader reader = new CSVReader();
